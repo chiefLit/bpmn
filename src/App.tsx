@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from 'react';
+import BpmnModeler from 'bpmn-js/lib/Modeler';
 
-function App() {
-  const [count, setCount] = useState(0)
+import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
+function Home() {
+  const [bpmnModeler, setBpmnModeler] = useState<BpmnModeler>()
+  const canvasRef = useRef<HTMLDivElement>(null)
+  console.log(123121)
+
+  useEffect(() => {
+    const bpmnModeler = new BpmnModeler({
+      container: canvasRef.current!,
+      propertiesPanel: {
+        parent: '#properties-panel',
+      },
+    });
+    setBpmnModeler(bpmnModeler)
+    bpmnModeler.createDiagram()
+  }, [])
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <div id="canvas" ref={canvasRef} style={{ height: '70vh' }}></div>
+      <div id="properties-panel"></div>
+    </div>
   )
 }
 
-export default App
+export default Home;
